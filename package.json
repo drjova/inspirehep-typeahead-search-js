@@ -1,0 +1,27 @@
+{
+  "name": "inspirehep-typeahead-search-js",
+  "version": "0.1.0",
+  "description": "JavaScript search bar autocompletion powered by typeahead.js",
+  "author": {
+    "name": "INSPIREHEP",
+    "email": "admin@inspirehep.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inspirehep/inspirehep-typeahead-search-js.git"
+  },
+  "dependencies": {
+    "jquery": "~2.2",
+    "jquery-plugin": "git+https://github.com/acdvorak/jquery.caret.git#v1.5.2",
+    "typeahead.js": "=0.10.5",
+    "requirejs": "~2.1.22"
+  },
+  "engines": {
+    "node": ">=0.10"
+  },
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/inspirehep/inspirehep-typeahead-search-js/issues"
+  },
+  "homepage": "https://github.com/inspirehep/inspirehep-typeahead-search-js"
+}

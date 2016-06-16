@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <script src="./node_modules/requirejs/require.js"></script>
+    <script src="./settings.js"></script>
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+    <link href="./node_modules/typeahead.js-bootstrap-css/typeaheadjs.css" rel="stylesheet"/>
+    <style>
+      body {
+        padding-top: 70px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="jumbotron">
+            <h1>Invenio Typeahead Demo</h1>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Go!</button>
+                </span>
+                <input type="text" class="form-control" name="search" id="search" placeholder="Start typing to autocomplete...">
+              </div><!-- /input-group -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      require([
+        'jquery',
+        'invenio_with_spires_typeahead_configuration',
+        // Change to default_typeahead_configuration for Invenio-only syntax
+        'typeahead',
+        'inspirehep-typeahead',
+        'hogan'
+      ], function($, getParserConf, Bloodhound) {
+        // First configure the available keywords for each syntax
+        var invenio_keywords = ['title', 'author'];
+        var spires_keywords = ['title', 'a'];
+        var parser_config = getParserConf(invenio_keywords, spires_keywords);
+
+        // Customize what will be passed in the remote call as %TYPE
+        parser_config.invenio.value_type_interpretation = {
+          author: 'authors.name_suggest'
+        }
+
+        parser_config.spires.value_type_interpretation = {
+          a: 'authors.name_suggest'
+        }
+
+        // For advanced usages, you can create a custom suggestion function
+        var DefaultSuggestionTemplate = Hogan.compile(
+          '<strong>{{ value }}</strong>'
+        );
+
+        var AuthorSuggestionTemplate = Hogan.compile(
+          '<p><strong>{{ name }}</strong><br>' +
+          '<small class="text-muted">{{ value }}</small></p>'
+        );
+
+        var suggestion_fn = function(data) {
+          // From your suggester endpoint, return a list of dictionaries under
+          // the results key. E.g
+          // {'results': [{'name': 'Ellis', 'value': 'identifierX', template: 'author'}]}
+          // The key value is what will go inside the input when user makes
+          // the selection
+          if (data.template === "author") {
+            return AuthorSuggestionTemplate.render.call(AuthorSuggestionTemplate, data);
+          }
+          return DefaultSuggestionTemplate.render.call(DefaultSuggestionTemplate, data);
+        }
+
+
+        $("#search").searchTypeahead({
+          // A server returning a list of values is needed
+          // Also CORS needs to be enabled, e.g with a browser extension
+          value_hints_url: 'http://localhost:5000/search/suggest?field=%TYPE&query=%QUERY',
+          options_sets: parser_config,
+          default_set: 'invenio',
+          suggestion_fn: suggestion_fn
+        });
+
+        });
+      </script>
+
+  </body>
+</html>

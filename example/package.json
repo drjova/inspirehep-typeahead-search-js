@@ -1,0 +1,24 @@
+{
+  "name": "inspirehep-typeahead-search-js-demo",
+  "version": "0.0.1",
+  "description": "Inspirehep-Typeahead Demo",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "INSPIRE",
+    "email": "admin@inspirehep.net"
+  },
+  "license": "GPLv2",
+  "private": "true",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "jquery": "~2.2",
+    "jquery-plugin": "git+https://github.com/acdvorak/jquery.caret.git#v1.5.2",
+    "typeahead.js": "=0.10.5",
+    "requirejs": "~2.1.22",
+    "typeahead.js-bootstrap-css": "~1.2.1",
+    "hogan.js": "~3.0.2"
+  }
+}
