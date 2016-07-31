@@ -164,7 +164,8 @@ define([
 
     this.dontBracket = false;
     this.value_types = this.options.value_types;
-    this.suggestion_fn = this.options.suggestion_fn
+    this.suggestion_fn = this.options.suggestion_fn;
+    this.filter_fn = this.options.filter_fn;
 
     for (var i in this.options.options_sets) {
       this.options.options_sets[i] =
@@ -219,7 +220,7 @@ define([
           replace: function(url, query) {
             return that.getUrl.call(that, url, query);
           },
-          filter: this.processResponse
+          filter: this.options.filter_fn || this.processResponse
         },
         datumTokenizer: function(d) {
           return Bloodhound.tokenizers.whitespace(d.value);

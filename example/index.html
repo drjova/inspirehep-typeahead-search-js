@@ -76,6 +76,18 @@
           return DefaultSuggestionTemplate.render.call(DefaultSuggestionTemplate, data);
         }
 
+        var filter_fn = function(response) {
+          // Do some processing to convert ES autocomplete output to the expected
+          // format by typeahead.js
+          var result = [];
+          for (var key in response) {
+            var items = response[key][0];
+            for ( var idx in items['options'] ) {
+              result.push({'value': items['options'][idx]['text']});
+            }
+          }
+          return result;
+        }
 
         $("#search").searchTypeahead({
           // A server returning a list of values is needed
@@ -83,7 +95,8 @@
           value_hints_url: 'http://localhost:5000/search/suggest?field=%TYPE&query=%QUERY',
           options_sets: parser_config,
           default_set: 'invenio',
-          suggestion_fn: suggestion_fn
+          suggestion_fn: suggestion_fn,
+          filter_fn: filter_fn
         });
 
         });
