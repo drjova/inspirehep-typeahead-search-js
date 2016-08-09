@@ -13,12 +13,14 @@
   "license": "GPLv2",
   "private": "true",
   "dependencies": {
+    "angular": "^1.4.11",
     "bootstrap": "^3.3.5",
+    "hogan.js": "~3.0.2",
+    "invenio-search-js": "^0.2.1",
     "jquery": "~2.2",
     "jquery-plugin": "git+https://github.com/acdvorak/jquery.caret.git#v1.5.2",
-    "typeahead.js": "=0.10.5",
     "requirejs": "~2.1.22",
-    "typeahead.js-bootstrap-css": "~1.2.1",
-    "hogan.js": "~3.0.2"
+    "typeahead.js": "=0.10.5",
+    "typeahead.js-bootstrap-css": "~1.2.1"
   }
 }

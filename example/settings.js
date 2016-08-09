@@ -24,6 +24,8 @@
 require.config({
   baseUrl: ".",
   paths: {
+    angular: 'node_modules/angular/angular',
+    "invenio-search-js": 'node_modules/invenio-search-js/dist/invenio-search-js',
     typeahead: 'node_modules/typeahead.js/dist/typeahead.bundle',
     jquery: 'node_modules/jquery/dist/jquery',
     'jquery-caret': 'node_modules/jquery-plugin/dist/jquery.caret-1.5.0',
@@ -34,6 +36,12 @@ require.config({
     hogan: 'node_modules/hogan.js/web/builds/3.0.2/hogan-3.0.2.amd',
   },
   shim: {
+    angular: {
+      exports: "angular"
+    },
+    "invenio-search-js": {
+      deps: ["angular"]
+    },
     jquery: {
       exports: "$"
     },

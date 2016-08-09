@@ -19,12 +19,17 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
-                <input type="text" class="form-control" name="search" id="search" placeholder="Start typing to autocomplete...">
-              </div><!-- /input-group -->
+              <div id="invenio-search">
+                <invenio-search search-endpoint="http://localhost:5000/api/records/">
+                  <invenio-search-autocomplete-bar
+                    template="./templates/searchBar.html"
+                    placeholder="Start typing">
+                  </invenio-search-autocomplete-bar>
+                  <invenio-search-results
+                    template="./node_modules/invenio-search-js/dist/templates/results.html">
+                  </invenio-search-results>
+                </invenio-search>
+              </div>
             </div>
           </div>
         </div>
@@ -38,7 +43,9 @@
         // Change to default_typeahead_configuration for Invenio-only syntax
         'typeahead',
         'inspirehep-typeahead',
-        'hogan'
+        'hogan',
+        'angular',
+        'invenio-search-js'
       ], function($, getParserConf, Bloodhound) {
         // First configure the available keywords for each syntax
         var invenio_keywords = ['title', 'author'];
@@ -89,18 +96,42 @@
           return result;
         }
 
-        $("#search").searchTypeahead({
-          // A server returning a list of values is needed
-          // Also CORS needs to be enabled, e.g with a browser extension
-          value_hints_url: 'http://localhost:5000/search/suggest?field=%TYPE&query=%QUERY',
-          options_sets: parser_config,
-          default_set: 'invenio',
-          suggestion_fn: suggestion_fn,
-          filter_fn: filter_fn
-        });
-
+        angular.module('invenioSearchAutocomplete', [])
+          .directive('invenioSearchAutocompleteBar', function() {
+              function link(scope, element, attrs, vm) {
+                function updateQuery() {
+                  vm.invenioSearchArgs.q = vm.userQuery;
+                }
+                scope.placeholder = attrs.placeholder;
+                scope.updateQuery = updateQuery;
+                $("#search").searchTypeahead({
+                  // A server returning a list of values is needed
+                  // Also CORS needs to be enabled, e.g with a browser extension
+                  value_hints_url: 'http://localhost:5000/search/suggest?field=%TYPE&query=%QUERY',
+                  options_sets: parser_config,
+                  default_set: 'invenio',
+                  suggestion_fn: suggestion_fn,
+                  filter_fn: filter_fn
+                });
+              }
+              function templateUrl(element, attrs) {
+                return attrs.template;
+              }
+              return {
+                restrict: 'AE',
+                require: '^invenioSearch',
+                scope: false,
+                templateUrl: templateUrl,
+                link: link,
+              };
+          });
+        // bootstrap
+        angular.element(document).ready(function() {
+          angular.bootstrap(
+            document.getElementById('invenio-search'), ['invenioSearch', 'invenioSearchAutocomplete']
+          )
+        })
         });
       </script>
-
   </body>
 </html>
